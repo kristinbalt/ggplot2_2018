@@ -36,14 +36,14 @@ p4
 p5<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY"))+
   geom_point(aes(x=per.athena.reports,y=athena.cdc.cor, color="ATH"))+
-  scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))
 p5
 
 # add shapes to distinguish geographical resolutions
 p6<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)))+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)))+
-  scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))
 p6
 
 # change shapes 
@@ -51,16 +51,16 @@ p6
 p7<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)))+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)))+
-  scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
-  scale_shape_manual(labels=c("Regional", "State"), values = c(15, 17))
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region", labels=c("Regional", "State"), values = c(15, 17))
 p7
 
 # change size 
 p8<- ggplot(data1, aes())+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
-  scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
-  scale_shape_manual(labels=c("Regional", "State"), values = c(15, 17))
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region", labels=c("Regional", "State"), values = c(15, 17))
 p8
 
 # remove grey background 
@@ -68,8 +68,8 @@ p9<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
   theme_bw()+
-  scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
-  scale_shape_manual(labels=c("Regional", "State"), values = c(15, 17))
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region", labels=c("Regional", "State"), values = c(15, 17))
 p9
 
 # add axis labels and title
@@ -77,8 +77,8 @@ p10<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
   theme_bw()+
-  scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
-  scale_shape_manual(labels=c("Regional", "State"), values = c(15, 17))+
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region", labels=c("Regional", "State"), values = c(15, 17))+
   ylab("Correlation")+xlab("Percent of Reports")+
   ggtitle("Example 1")
 p10
@@ -88,12 +88,11 @@ p11<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
   theme_bw()+
-  scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
-  scale_shape_manual(labels=c("Regional", "State"), values = c(15, 17))+
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region", labels=c("Regional", "State"), values = c(15, 17))+
   ylab("Correlation")+xlab("Percent of Reports")+
   ggtitle("Example 1") +
-  theme(legend.title=element_blank(),
-        legend.justification=c(1,1), 
+  theme(legend.justification=c(1,1), 
         legend.position=c(0.98,0.5),
         legend.key = element_rect(fill="transparent"),
         legend.background = element_rect(fill="transparent"),
@@ -105,13 +104,12 @@ p12<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
   theme_bw()+
-  scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
-  scale_shape_manual(labels=c("Regional", "State"), values = c(15, 17))+
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region", labels=c("Regional", "State"), values = c(15, 17))+
   scale_y_continuous( limits = c(0,1), expand = c(0,0) )+
   ylab("Correlation")+xlab("Percent of Reports")+
   ggtitle("Example 1") +
-  theme(legend.title=element_blank(),
-        legend.justification=c(1,1), 
+  theme(legend.justification=c(1,1), 
         legend.position=c(0.98,0.5),
         legend.key = element_rect(fill="transparent"),
         legend.background = element_rect(fill="transparent"),
@@ -123,16 +121,15 @@ p13<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
   theme_bw()+
-  scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
-  scale_shape_manual(labels=c("Regional", "State"), values = c(15, 17))+
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region", labels=c("Regional", "State"), values = c(15, 17))+
   scale_y_continuous( limits = c(0,1), expand = c(0,0) )+
   ylab("Correlation")+
   xlab("Number of athenahealth Reports")+
   scale_x_continuous( limits = c(-0.1,26.5), expand = c(0,0), position="bottom", breaks = c(5, 10, 15, 20, 25),
                       labels = c(43166, 86336, 129504, 172672, 215840), sec.axis= sec_axis(~.*97, name="Number of FNY Reports"))+
   ggtitle("Example 1") +
-  theme(legend.title=element_blank(),
-        legend.justification=c(1,1), 
+  theme(legend.justification=c(1,1), 
         legend.position=c(0.98,0.5),
         legend.key = element_rect(fill="transparent"),
         legend.background = element_rect(fill="transparent"),
@@ -144,8 +141,8 @@ p14<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
   theme_bw()+
-  scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
-  scale_shape_manual(labels=c("Regional", "State"), values = c(15, 17))+
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region", labels=c("Regional", "State"), values = c(15, 17))+
   scale_y_continuous( limits = c(0,1), expand = c(0,0) )+
   ylab("Correlation")+
   xlab("Number of athenahealth Reports")+
