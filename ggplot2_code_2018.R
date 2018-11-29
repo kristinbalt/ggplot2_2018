@@ -9,38 +9,38 @@ library(ggplot2)
 data1<-read.csv("~/example1.csv", header=T)
 
 # scatterplot
-p1<- ggplot(data1, aes(x=per.fny.reports, y=fny.cdc.cor))+
-  geom_point()
+p1<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor))
 p1
 
 # add 2nd variable
-p2<- ggplot(data1, aes())+
+p2<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor))+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor))
 p2
 
 # distinguish colors
 # http://html-color-codes.com/
-p3<- ggplot(data1, aes())+
+p3<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor), color="#FF7270")+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor), color="#008CB7")
 p3
 
 # add legend
-p4<- ggplot(data1, aes())+
+p4<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY"))+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH"))
 p4
 
 # add legend and specifiy colors
-p5<- ggplot(data1, aes())+
+p5<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY"))+
   geom_point(aes(x=per.athena.reports,y=athena.cdc.cor, color="ATH"))+
   scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))
 p5
 
 # add shapes to distinguish geographical resolutions
-p6<- ggplot(data1, aes())+
+p6<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)))+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)))+
   scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))
@@ -48,7 +48,7 @@ p6
 
 # change shapes 
 # http://sape.inf.usi.ch/quick-reference/ggplot2/shape
-p7<- ggplot(data1, aes())+
+p7<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)))+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)))+
   scale_color_manual(labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
@@ -64,7 +64,7 @@ p8<- ggplot(data1, aes())+
 p8
 
 # remove grey background 
-p9<- ggplot(data1, aes())+
+p9<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
   theme_bw()+
@@ -73,7 +73,7 @@ p9<- ggplot(data1, aes())+
 p9
 
 # add axis labels and title
-p10<- ggplot(data1, aes())+
+p10<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
   theme_bw()+
@@ -84,7 +84,7 @@ p10<- ggplot(data1, aes())+
 p10
   
 # adjust legend 
-p11<- ggplot(data1, aes())+
+p11<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
   theme_bw()+
@@ -101,7 +101,7 @@ p11<- ggplot(data1, aes())+
 p11
   
 # adjust y-axis
-p12<- ggplot(data1, aes())+
+p12<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
   theme_bw()+
@@ -119,7 +119,7 @@ p12<- ggplot(data1, aes())+
 p12
 
 # adjust x-axis
-p13<- ggplot(data1, aes())+
+p13<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
   theme_bw()+
@@ -140,7 +140,7 @@ p13<- ggplot(data1, aes())+
 p13
 
 # make adjustments to axis labels and text
-p14<- ggplot(data1, aes())+
+p14<- ggplot(data1)+
   geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
   geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
   theme_bw()+
