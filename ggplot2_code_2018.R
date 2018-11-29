@@ -6,7 +6,7 @@ library(ggplot2)
 
 
 # import data 'example1.csv'
-data1<-read.csv("~/Documents/BU/R/ggplot2/data/example1.csv", header=T)
+data1<-read.csv("~/example1.csv", header=T)
 
 # scatterplot
 p1<- ggplot(data1, aes(x=per.fny.reports, y=fny.cdc.cor))+
@@ -173,24 +173,24 @@ p14<- ggplot(data1, aes())+
 p14
 
 # Save the last plot created as pdf
-ggsave("~/Documents/BU/R/ggplot2/example1.pdf", width = 12, height = 12, units = "cm")
+ggsave("~/example1.pdf", width = 12, height = 12, units = "cm")
 
 ######################################################################
 # Example 2 - Combine mutliple graphs
 
 ######################################
 # Part 1 - Continuous heatmap scale
-all<- read.csv("~/Documents/BU/R/ggplot2/example2.csv", header=T)
+data2<- read.csv("~/example2.csv", header=T)
 
 # Format week
-all$week_of<-as.Date(all$week_of, "%Y-%m-%d")
+data2$week_of<-as.Date(data2$week_of, "%Y-%m-%d")
 
 # Order regions
-all$region<-factor(all$region,levels=c("National", "Region 1", "Region 2", "Region 3"),ordered=TRUE)
+data2$region<-factor(data2$region,levels=c("National", "Region 1", "Region 2", "Region 3"),ordered=TRUE)
 
 heat_series<-function(filler, titler){
 ploty <- ggplot()+ 
-  geom_tile(aes(y=all$region, x=all$week_of,fill = filler), colour = "white") + 
+  geom_tile(aes(y=data2$region, x=data2$week_of,fill = filler), colour = "white") + 
   scale_fill_gradient(low="white", high= "#990000") + 
   theme_bw() +  
   scale_x_date(expand = c(0,0),date_breaks = "1 month", date_labels =  "%m/%Y") +
@@ -209,15 +209,15 @@ ploty <- ggplot()+
 return(ploty)
 }
 
-heat1<-heat_series(all$weighted_ili, "CDC ILINet")
-heat2<-heat_series(all$per_ili, "Flu Near You")
-heat3<-heat_series(all$ath_ili, "athenahealth")
-heat4<-heat_series(all$twe_ili, "HealthTweets.org")
+heat1<-heat_series(data2$weighted_ili, "CDC ILINet")
+heat2<-heat_series(data2$per_ili, "Flu Near You")
+heat3<-heat_series(data2$ath_ili, "athenahealth")
+heat4<-heat_series(data2$twe_ili, "HealthTweets.org")
 
 library(gridExtra)
 library(grid)
 
-pdf(file='~/Documents/BU/R/ggplot2/example2a.pdf',width=8, height=6)
+pdf(file='~/example2a.pdf',width=8, height=6)
 grid.arrange(arrangeGrob(heat1 + theme(axis.title = element_blank()), 
                          heat2 + theme(axis.title = element_blank()),
                          heat3 + theme(axis.title = element_blank()), 
@@ -231,14 +231,14 @@ dev.off()
 # Part 2 - Categorical heatmap scale with 1 legend
 
 # Create color buckets
-all$colorBuckets1 <- as.factor(as.numeric(cut(all$weighted_ili,c(0, 1.0, 2.0, 3.0, 4.0 ,20))))
-all$colorBuckets2 <- as.factor(as.numeric(cut(all$per_ili,c(0, 1.0, 2.0, 3.0, 4.0 ,20))))
-all$colorBuckets3 <- as.factor(as.numeric(cut(all$ath_ili,c(0, 1.0, 2.0, 3.0, 4.0 ,20))))
-all$colorBuckets4 <- as.factor(as.numeric(cut(all$twe_ili,c(0, 1.0, 2.0, 3.0, 4.0 ,20))))
+data2$colorBuckets1 <- as.factor(as.numeric(cut(data2$weighted_ili,c(0, 1.0, 2.0, 3.0, 4.0 ,20))))
+data2$colorBuckets2 <- as.factor(as.numeric(cut(data2$per_ili,c(0, 1.0, 2.0, 3.0, 4.0 ,20))))
+data2$colorBuckets3 <- as.factor(as.numeric(cut(data2$ath_ili,c(0, 1.0, 2.0, 3.0, 4.0 ,20))))
+data2$colorBuckets4 <- as.factor(as.numeric(cut(data2$twe_ili,c(0, 1.0, 2.0, 3.0, 4.0 ,20))))
 
 heat_series2<-function(bucket, titler){
   ploty <- ggplot()+ 
-    geom_tile(aes(y=all$region, x=all$week_of,fill = bucket), colour = "white") + 
+    geom_tile(aes(y=data2$region, x=data2$week_of,fill = bucket), colour = "white") + 
     scale_fill_manual(values=c("#99CCFF", "#3399FF", "#0066CC","#004C99", "#003366"), name="Baseline",
                       labels=c("0-1.0", "1.01-2.0", "2.01-3.0", "3.01-4.0", ">4.0"))+
     theme_bw() +  
@@ -258,16 +258,16 @@ heat_series2<-function(bucket, titler){
   return(ploty)
 }
 
-heat1a<-heat_series2(all$colorBuckets1, "CDC ILINet")
-heat2a<-heat_series2(all$colorBuckets2, "Flu Near You")
-heat3a<-heat_series2(all$colorBuckets3, "athenahealth")
-heat4a<-heat_series2(all$colorBuckets4, "HealthTweets.org")
+heat1a<-heat_series2(data2$colorBuckets1, "CDC ILINet")
+heat2a<-heat_series2(data2$colorBuckets2, "Flu Near You")
+heat3a<-heat_series2(data2$colorBuckets3, "athenahealth")
+heat4a<-heat_series2(data2$colorBuckets4, "HealthTweets.org")
 
 library(gtable)
 
 legend = gtable_filter(ggplotGrob(heat1a), "guide-box")
 
-pdf(file='~/Documents/BU/R/ggplot2/example2b.pdf',width=8, height=6)
+pdf(file='~/example2b.pdf',width=8, height=6)
 grid.arrange(arrangeGrob(heat1a + theme(axis.title = element_blank(), legend.position = "none", axis.text.x = element_blank()), 
                          heat2a + theme(axis.title = element_blank(), legend.position = "none", axis.text = element_blank()),
                          heat3a + theme(axis.title = element_blank(), legend.position = "none"), 
