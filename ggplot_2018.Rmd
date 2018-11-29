@@ -1,0 +1,562 @@
+---
+title: "BSA - Student Faculty Seminar"
+author: "Kristin Baltrusaitis"
+date: "11/29/2018"
+output:
+
+  beamer_presentation: 
+    theme: "Madrid"
+    colortheme: "beaver"
+    fig_width: 8
+    fig_height: 6
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2) 
+data1<-read.csv("~/Documents/BU/R/ggplot2/data/example1.csv", header=T)
+data2<- read.csv("~/Documents/BU/R/ggplot2/data/example2.csv", header=T)
+data2$week_of<-as.Date(data2$week_of, "%Y-%m-%d")
+
+# Order regions
+data2$region<-factor(data2$region,levels=c("National", "Region 1", "Region 2", "Region 3"),ordered=TRUE)
+
+heat_series<-function(filler, titler){
+ploty <- ggplot()+ 
+  geom_tile(aes(y=data2$region, x=data2$week_of,fill = filler), colour = "white") + 
+  scale_fill_gradient(low="white", high= "#990000") + 
+  theme_bw() +  
+  scale_x_date(expand = c(0,0),date_breaks = "1 month", date_labels =  "%m/%Y") +
+  scale_y_discrete(expand = c(0, 0)) +
+  ggtitle(titler)+
+  ylab("Geographical Area")+ xlab("Month")+
+  theme(panel.grid=element_blank(), panel.border=element_blank(),
+        legend.position="right", legend.title = element_blank(), 
+        legend.key.size = unit(0.2, "in"),
+        legend.text = element_text(size=7),
+        axis.ticks = element_blank(), 
+        axis.text.x=element_text(angle=60, hjust=1, size=8),
+        axis.text.y = element_text(angle=45, hjust = 1, size=8),
+        plot.title = element_text(hjust = 0.5, size=10))
+
+return(ploty)
+}
+```
+
+# Introduction to ggplot2 
+
+ggplot2:
+
+ - based on Leland Wilkinson’s Grammar of Graphics
+ 
+ - formal structured perspective on how to describe graphics
+ 
+ - references:
+ 
+1) [R Graphics Cookbook](http://ase.tufts.edu/bugs/guide/assets/R%20Graphics%20Cookbook.pdf) by Winston Chang
+
+2) ggplot2: Elegant Graphics for Data Analysis by Hadley Wickham
+
+# Introduction to ggplot2 
+
+Basic Structure:
+
+1) Start with ggplot object
+
+2) add components with +
+
+3) print
+
+# Terminology 
+- data: What we want to visualize
+
+- geom_: geometric objects that are drawn to represent the data [geom_bar, geom_line, ect]
+
+- aes:  aesthetic attributes, the visual properties of geoms [x, y, line color, point shapes, ect]
+
+- scales: control the mapping of data values to aesthetics
+
+- guides: show the viewer how to interpret the visual representation [tick marks, axis labels, ect]
+
+# Data
+Know thy data..
+
+- The structure of the data (long vs. wide) will play a role in how you build the ggplot objects.
+
+- The format (continuous, categorical, time, ordinal) of variables will play a role in the type of components that you can add to your ggplot object.
+
+```{r, echo=FALSE}
+print(data1[1:4,c(1,4:7)])
+```
+
+
+#Step 1: create scatterplot
+
+```{r}
+p1<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor))
+```
+
+#Step 1: create scatterplot
+
+```{r, echo=FALSE}
+p1
+```
+
+#Step 2: add 2nd variable
+
+```{r}
+p2<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor))+
+  geom_point(aes(x=per.athena.reports, y=athena.cdc.cor))
+```
+
+#Step 2: add 2nd variable
+
+```{r, echo=FALSE}
+p2
+```
+
+#Step 3: distinguish colors
+
+```{r}
+p3<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor), 
+             color="#FF7270")+
+  geom_point(aes(x=per.athena.reports, y=athena.cdc.cor), 
+             color="#008CB7")
+```
+
+#Step 3: distinguish colors
+
+```{r, echo=FALSE}
+p3
+```
+
+#Step 4: add legend
+
+```{r}
+p4<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, 
+                 color="FNY"))+
+  geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, 
+                 color="ATH"))
+```
+
+#Step 4: add legend
+
+```{r, echo=FALSE}
+p4
+```
+
+
+#Step 5: add legend and specify colors
+
+```{r}
+p5<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, 
+                 color="FNY"))+
+  geom_point(aes(x=per.athena.reports,y=athena.cdc.cor, 
+                 color="ATH"))+
+  scale_color_manual(name="System",
+    labels = c("athenahealth", "Flu Near You"),
+    values=c(ATH="#008CB7", FNY="#FF7270"))
+```
+
+#Step 5: add legend and specify colors
+
+```{r, echo=FALSE}
+p5
+```
+
+
+#Step 6: add shapes to distinguish geographical resolutions
+
+```{r}
+p6<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, 
+                 color="FNY", shape = factor(scale)))+
+  geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, 
+                 color="ATH", shape = factor(scale)))+
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), 
+                     values=c(ATH="#008CB7", FNY="#FF7270"))
+```
+
+#Step 6: add shapes to distinguish geographical resolutions
+
+```{r, echo=FALSE}
+p6
+```
+
+
+#Step 7: change shapes
+
+```{r}
+p7<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, 
+                 color="FNY", shape = factor(scale)))+
+  geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, 
+                 color="ATH", shape = factor(scale)))+
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), 
+                     values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region",labels=c("Regional", "State"), 
+                     values = c(15, 17))
+```
+
+#Step 7: change shapes
+
+```{r, echo=FALSE}
+p7
+```
+
+
+#Step 8: change size
+
+```{r}
+p8<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, 
+        color="FNY", shape = factor(scale)), size=2)+
+  geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, 
+        color="ATH", shape = factor(scale)), size=2)+
+  scale_color_manual(name="System",labels = c("athenahealth", "Flu Near You"), 
+              values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region",labels=c("Regional", "State"), 
+                     values = c(15, 17))
+```
+
+#Step 8: change size
+
+```{r, echo=FALSE}
+p8
+```
+
+
+#Step 9: remove grey background
+
+```{r}
+p9<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, 
+      color="FNY", shape = factor(scale)), size=2)+
+  geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, 
+        color="ATH", shape = factor(scale)), size=2)+
+  theme_bw()+
+  scale_color_manual(name="System",labels = c("athenahealth", "Flu Near You"), 
+              values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region",labels=c("Regional", "State"), 
+                     values = c(15, 17))
+```
+
+#Step 9: remove grey background
+
+```{r, echo=FALSE}
+p9
+```
+
+
+#Step 10: add axis labels and title
+
+```{r}
+p10<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, 
+      color="FNY", shape = factor(scale)), size=2)+
+  geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, 
+      color="ATH", shape = factor(scale)), size=2)+
+  theme_bw()+
+  scale_color_manual(name="System",labels = c("athenahealth", "Flu Near You"), 
+          values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region",labels=c("Regional", "State"), 
+              values = c(15, 17))+
+  ylab("Correlation")+xlab("Percent of Reports")+
+  ggtitle("Example 1")
+```
+
+#Step 10: add axis labels and title
+
+```{r, echo=FALSE}
+p10
+```
+
+
+#Step 11: adjust legend 
+
+```{r}
+p11<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
+  geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
+  theme_bw()+
+  scale_color_manual(name="System", labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region", labels=c("Regional", "State"), values = c(15, 17))+
+  ylab("Correlation")+xlab("Percent of Reports")+
+  ggtitle("Example 1") +
+  theme(legend.justification=c(1,1), 
+        legend.position=c(0.98,0.5),
+        legend.key = element_rect(fill="transparent"),
+        legend.background = element_rect(fill="transparent"),
+        legend.key.size = unit(0.5, "cm"))
+
+```
+
+#Step 11: adjust legend 
+
+```{r, echo=FALSE}
+p11
+```
+
+#Step 12: adjust y-axis 
+
+```{r}
+p12<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
+  geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
+  theme_bw()+
+  scale_color_manual(name="System",labels = c("athenahealth", "Flu Near You"), 
+                     values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region",labels=c("Regional", "State"), values = c(15, 17))+
+  scale_y_continuous( limits = c(0,1), expand = c(0,0) )+
+  ylab("Correlation")+xlab("Percent of Reports")+
+  ggtitle("Example 1") +
+  theme(legend.justification=c(1,1), 
+        legend.position=c(0.98,0.5),
+        legend.key = element_rect(fill="transparent"),
+        legend.background = element_rect(fill="transparent"),
+        legend.key.size = unit(0.5, "cm"))
+
+```
+
+#Step 12: adjust y-axis
+
+```{r, echo=FALSE}
+p12
+```
+
+#Step 13: adjust x-axis 
+
+```{r}
+p13<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+
+  geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+
+  theme_bw()+
+  scale_color_manual(name="System",labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+
+  scale_shape_manual(name="Region",labels=c("Regional", "State"), values = c(15, 17))+
+  scale_y_continuous( limits = c(0,1), expand = c(0,0) )+
+  ylab("Correlation")+
+  xlab("Number of athenahealth Reports")+
+  scale_x_continuous( limits = c(-0.1,26.5), expand = c(0,0),
+          position="bottom", breaks = c(5, 10, 15, 20, 25),
+          labels = c(43166, 86336, 129504, 172672, 215840), 
+          sec.axis= sec_axis(~.*97, name="Number of FNY Reports"))+
+  ggtitle("Example 1") +
+  theme(legend.justification=c(1,1), 
+        legend.position=c(0.98,0.5),
+        legend.key = element_rect(fill="transparent"),
+        legend.background = element_rect(fill="transparent"),
+        legend.key.size = unit(0.5, "cm"))
+
+```
+
+#Step 13: adjust x-axis
+
+```{r, echo=FALSE}
+p13
+```
+
+#Step 14: make adjustments to axis labels and text 
+
+```{r}
+p14<- ggplot(data1)+
+  geom_point(aes(x=per.fny.reports, y=fny.cdc.cor, color="FNY", shape = factor(scale)), size=2)+geom_point(aes(x=per.athena.reports, y=athena.cdc.cor, color="ATH", shape = factor(scale)), size=2)+ theme_bw()+
+  scale_color_manual(name="System",labels = c("athenahealth", "Flu Near You"), values=c(ATH="#008CB7", FNY="#FF7270"))+ scale_shape_manual(name="Region", labels=c("Regional", "State"), values = c(15, 17))+scale_y_continuous( limits = c(0,1), expand = c(0,0) )+ ylab("Correlation")+ xlab("Number of athenahealth Reports")+
+  scale_x_continuous( limits = c(-0.1,26.5), expand = c(0,0), position="bottom", breaks = c(5, 10, 15, 20, 25), labels = c(43166, 86336, 129504, 172672, 215840), sec.axis= sec_axis(~.*97, name="Number of FNY Reports"))+
+  ggtitle("BSA Student-Faculty Seminar \n Example 1") +
+  theme(legend.justification=c(1,1), 
+        legend.position=c(0.98,0.5),
+        legend.key = element_rect(fill="transparent"),
+        legend.background = element_rect(fill="transparent"),
+        legend.key.size = unit(0.5, "cm"),
+        plot.title = element_text(hjust = 0.5, size=9),
+        axis.text.x=element_text(size=7),
+        axis.text.y=element_text(angle=90, hjust=0.5, size=7),
+        axis.title=element_text(size=9),
+        text=element_text(family="sans"),
+        panel.grid.minor.x = element_blank())
+
+```
+
+#Step 14: make adjustments to axis labels and text
+
+```{r, echo=FALSE}
+p14
+```
+
+
+#Step 15: Save the last plot created as pdf
+
+```{r}
+ggsave("~/Documents/BU/R/ggplot2/example1.pdf", 
+       width = 12, height = 12, units = "cm")
+```
+
+#Example 2 - Combine mutliple graphs
+
+```{r, echo=FALSE}
+print(data2[1:4,2:7])
+```
+
+#Time series heat map
+
+```{r, echo=FALSE}
+heat1<-heat_series(data2$weighted_ili, "CDC ILINet")
+heat1
+```
+
+#Create a function
+
+```{r}
+heat_series<-function(filler, titler){
+ploty <- ggplot()+ 
+  geom_tile(aes(y=data2$region, x=data2$week_of,fill = filler), colour = "white") + 
+  scale_fill_gradient(low="white", high= "#990000") + 
+  scale_x_date(expand = c(0,0),date_breaks = "1 month", date_labels =  "%m/%Y") +
+  scale_y_discrete(expand = c(0, 0)) + theme_bw() + 
+  ggtitle(titler)+ ylab("Geographical Area")+ xlab("Month")+
+  theme(panel.grid=element_blank(), panel.border=element_blank(),
+        legend.position="right", legend.title = element_blank(), 
+        legend.key.size = unit(0.2, "in"), legend.text = element_text(size=7), 
+        axis.ticks = element_blank(), plot.title = element_text(hjust = 0.5, size=10), 
+        axis.text.x=element_text(angle=60, hjust=1, size=8),
+        axis.text.y = element_text(angle=45, hjust = 1, size=8))
+return(ploty)
+}
+```
+
+#Call the function
+
+```{r}
+heat1<-heat_series(data2$weighted_ili, "CDC ILINet")
+heat2<-heat_series(data2$per_ili, "Flu Near You")
+heat3<-heat_series(data2$ath_ili, "athenahealth")
+heat4<-heat_series(data2$twe_ili, "HealthTweets.org")
+```
+
+#Combine into one image
+
+```{r}
+library(gridExtra)
+library(grid)
+
+pdf(file='~/Documents/BU/R/ggplot2/example2a.pdf',width=8, height=6)
+grid.arrange(arrangeGrob(heat1 + theme(axis.title = element_blank()), 
+                         heat2 + theme(axis.title = element_blank()),
+                         heat3 + theme(axis.title = element_blank()), 
+                         heat4 + theme(axis.title = element_blank()),
+                         left = textGrob("Geographical Area", rot = 90, vjust = 1),
+                         bottom = textGrob("Month", hjust = 0.5), ncol=2))
+dev.off()
+
+```
+
+#Combine into one image
+
+```{r, echo=FALSE}
+grid.arrange(arrangeGrob(
+  heat1 + theme(axis.title = element_blank()), 
+  heat2 + theme(axis.title = element_blank()),
+  heat3 + theme(axis.title = element_blank()), 
+  heat4 + theme(axis.title = element_blank()),
+  left = textGrob("Geographical Area", rot = 90, vjust = 1),
+  bottom = textGrob("Month", hjust = 0.5), ncol=2))
+```
+
+#Time series heat map - categorical variable
+
+```{r}
+# Create color buckets
+data2$colorBuckets1 <- as.factor(as.numeric(
+  cut(data2$weighted_ili,c(0, 1.0, 2.0, 3.0, 4.0 ,20))))
+data2$colorBuckets2 <- as.factor(as.numeric(
+  cut(data2$per_ili,c(0, 1.0, 2.0, 3.0, 4.0 ,20))))
+data2$colorBuckets3 <- as.factor(as.numeric(
+  cut(data2$ath_ili,c(0, 1.0, 2.0, 3.0, 4.0 ,20))))
+data2$colorBuckets4 <- as.factor(as.numeric(
+  cut(data2$twe_ili,c(0, 1.0, 2.0, 3.0, 4.0 ,20))))
+
+```
+
+#Create a function
+
+```{r}
+heat_series2<-function(bucket, titler){
+  ploty <- ggplot()+ 
+    geom_tile(aes(y=data2$region, x=data2$week_of,fill = bucket), colour = "white") + 
+    scale_fill_manual(
+      values=c("#99CCFF", "#3399FF", "#0066CC","#004C99","#003366"), 
+      name="Percent ILI",
+      labels=c("0-1.0", "1.01-2.0", "2.01-3.0", "3.01-4.0",">4.0")) +
+    theme_bw() +    ggtitle(titler)+
+    scale_x_date(expand = c(0,0),date_breaks = "1 month", date_labels =  "%m/%Y") +
+    scale_y_discrete(expand = c(0, 0)) +
+    ylab("Geographical Area")+ xlab("Month")+
+    theme(panel.grid=element_blank(), panel.border=element_blank(),
+          legend.position="bottom", legend.title = element_blank(), 
+          legend.key.size = unit(0.2, "in"), legend.text = element_text(size=7),
+          axis.ticks = element_blank(), 
+          axis.text.x=element_text(angle=60, hjust=1, size=8),
+          axis.text.y = element_text(angle=45, hjust = 1, size=8),
+          plot.title = element_text(hjust = 0.5, size=10))
+  return(ploty)
+}
+```
+
+#Call the function
+
+```{r}
+heat1a<-heat_series2(data2$colorBuckets1, "CDC ILINet")
+heat2a<-heat_series2(data2$colorBuckets2, "Flu Near You")
+heat3a<-heat_series2(data2$colorBuckets3, "athenahealth")
+heat4a<-heat_series2(data2$colorBuckets4, "HealthTweets.org")
+```
+
+#Combine into one image - use only one legend
+
+```{r}
+library(gtable)
+
+legend = gtable_filter(ggplotGrob(heat1a), "guide-box")
+
+pdf(file='~/Documents/BU/R/ggplot2/example2b.pdf',width=8, height=6)
+grid.arrange(arrangeGrob(
+  heat1a + theme(axis.title = element_blank(), legend.position = "none", 
+                 axis.text.x = element_blank()), 
+  heat2a + theme(axis.title = element_blank(), legend.position = "none", 
+                 axis.text = element_blank()),
+  heat3a + theme(axis.title = element_blank(), legend.position = "none"), 
+  heat4a + theme(axis.title = element_blank(), legend.position = "none", 
+                 axis.text.y = element_blank()),
+  left = textGrob("Geographical Area", rot = 90, vjust = 1),
+   bottom = textGrob("Month", hjust = 0.5), ncol=2),
+   legend, nrow=2,heights=c(10, 1))
+dev.off()
+
+```
+
+#Combine into one image - use only one legend
+
+```{r, echo=FALSE}
+
+legend = gtable_filter(ggplotGrob(heat1a), "guide-box")
+
+grid.arrange(arrangeGrob(
+  heat1a + theme(axis.title = element_blank(), legend.position = "none", 
+                 axis.text.x = element_blank()), 
+  heat2a + theme(axis.title = element_blank(), legend.position = "none", 
+                 axis.text = element_blank()),
+  heat3a + theme(axis.title = element_blank(), legend.position = "none"), 
+  heat4a + theme(axis.title = element_blank(), legend.position = "none", 
+                 axis.text.y = element_blank()),
+  left = textGrob("Geographical Area", rot = 90, vjust = 1),
+   bottom = textGrob("Month", hjust = 0.5), ncol=2),
+   legend, nrow=2,heights=c(10, 1))
+
+```
+
